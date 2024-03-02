@@ -2,21 +2,25 @@
 using CommunityToolkit.Maui.Views;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Controls.Xaml;
+using System.Collections.Generic;
 
 namespace MiniZadanie3
 {
     public partial class MainPage : ContentPage
     {
         private bool isFirstButtonClick = true;
-
-        string song1 = "Ghost.mp3";
-        string song2 = "No Guts No Glory.mp3";
-        string song3 = "Zero to Hero.mp3";
+        private List<string> playlist = new List<string>
+        {
+            "Ghost.mp3",
+            "No Guts No Glory.mp3",
+            "Zero to Hero.mp3"
+        };
+        private int currentSongIndex = 0;
 
         public MainPage()
         {
             InitializeComponent();
-            MediaPlayer.Source = MediaSource.FromResource(song1);
+            MediaPlayer.Source = MediaSource.FromResource(playlist[currentSongIndex]);
         }
 
         private void PlayPauseButton_Clicked(object sender, EventArgs e)
@@ -36,7 +40,7 @@ namespace MiniZadanie3
             }
             else
             {
-                ChangeLabel($"Now playing {MediaPlayer.Source}", Color.FromRgb(118, 165, 175));
+                ChangeLabel($"Now playing {playlist[currentSongIndex]}", Color.FromRgb(118, 165, 175));
                 MediaPlayer.Play();
                 PlayButton.IsVisible = false;
                 PauseButton.IsVisible = true;
@@ -47,37 +51,22 @@ namespace MiniZadanie3
         {
             if (sender == PrevButton)
             {
-                if (MediaPlayer.Source?.ToString().Contains(song2, StringComparison.OrdinalIgnoreCase) == true)
-                {
-                    MediaPlayer.Source = MediaSource.FromResource(song1);
-                    ChangeLabel($"Now playing {MediaPlayer.Source}", Color.FromRgb(118, 165, 175));
-                    MediaPlayer.Play();
-                    PrevButton.IsEnabled = false;
-                }
-                else if (MediaPlayer.Source?.ToString().Contains(song3, StringComparison.OrdinalIgnoreCase) == true)
-                {
-                    MediaPlayer.Source = MediaSource.FromResource(song2);
-                    ChangeLabel($"Now playing {MediaPlayer.Source}", Color.FromRgb(118, 165, 175));
-                    MediaPlayer.Play();
-                    NextButton.IsEnabled = true;
-                }
+                currentSongIndex = (currentSongIndex - 1 + playlist.Count) % playlist.Count;
             }
             else if (sender == NextButton)
             {
-                if (MediaPlayer.Source?.ToString().Contains(song1, StringComparison.OrdinalIgnoreCase) == true)
-                {
-                    MediaPlayer.Source = MediaSource.FromResource(song2);
-                    ChangeLabel($"Now playing {MediaPlayer.Source}", Color.FromRgb(118, 165, 175));
-                    MediaPlayer.Play();
-                    PrevButton.IsEnabled = true;
-                }
-                else if (MediaPlayer.Source?.ToString().Contains(song2, StringComparison.OrdinalIgnoreCase) == true)
-                {
-                    MediaPlayer.Source = MediaSource.FromResource(song3);
-                    ChangeLabel($"Now playing {MediaPlayer.Source}", Color.FromRgb(118, 165, 175));
-                    MediaPlayer.Play();
-                    NextButton.IsEnabled = false;
-                }
+                currentSongIndex = (currentSongIndex + 1) % playlist.Count;
+            }
+
+            MediaPlayer.Source = MediaSource.FromResource(playlist[currentSongIndex]);
+            ChangeLabel($"Now playing {playlist[currentSongIndex]}", Color.FromRgb(118, 165, 175));
+
+            PrevButton.IsEnabled = currentSongIndex != 0;
+            NextButton.IsEnabled = currentSongIndex != playlist.Count - 1;
+
+            if (MediaPlayer.CurrentState == CommunityToolkit.Maui.Core.Primitives.MediaElementState.Playing)
+            {
+                MediaPlayer.Play();
             }
         }
 
