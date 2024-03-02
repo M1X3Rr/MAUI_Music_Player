@@ -1,0 +1,47 @@
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://schemas.microsoft.com/dotnet/2021/maui/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             mc:Ignorable="d"
+             x:Class="MiniZadanie3.MainPage">
+
+    <StackLayout>
+        <toolkit:MediaElement WidthRequest="650" HeightRequest="200"
+                              x:Name="MediaPlayer"
+                              ShouldShowPlaybackControls="False"
+                              />
+
+        <Label x:Name="LableText" Text="Press Play to start"
+               HorizontalOptions="Center" 
+               FontSize="50"
+               Padding="0,0,0,50"
+               />
+
+        <Grid x:Name="Controlls"
+              ColumnDefinitions="21*, 20*, 21*"
+              ColumnSpacing="3"
+              HorizontalOptions="FillAndExpand"
+              WidthRequest="600" HeightRequest="45"
+              >
+
+            <!-- Prev -->
+            <ImageButton x:Name="PrevButton" Grid.Column="0" IsEnabled="False" Clicked="NextPrevButton_Clicked"
+             BackgroundColor="Transparent" Source="previous_icon.png"/>
+
+            <!-- Play/Pause -->
+            <ImageButton x:Name="PlayButton" Grid.Column="1" HeightRequest="50" BackgroundColor="Transparent" Clicked="PlayPauseButton_Clicked"
+             Source="play_icon.png"/>
+            <ImageButton x:Name="PauseButton" Grid.Column="1" HeightRequest="50" BackgroundColor="Transparent" Clicked="PlayPauseButton_Clicked" IsVisible="False"
+             Source="pause_icon.png"/>
+
+            <!-- Next -->
+            <ImageButton x:Name="NextButton" Grid.Column="2" IsEnabled="False" Clicked="NextPrevButton_Clicked"
+             BackgroundColor="Transparent" Source="next_icon.png"/>
+
+
+
+        </Grid>
+
+    </StackLayout>
+</ContentPage>
